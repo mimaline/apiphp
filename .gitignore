@@ -1,0 +1,10 @@
+api/vendor/
+.idea/
+api/lib/php/
+
+vendor/
+
+api/docs/auxilioemergencial_rows_1.csv
+api/docs/auxilioemergencial_rows_2.csv
+api/docs/auxilioemergencial_rows_3.csv
+
