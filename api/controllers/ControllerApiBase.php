@@ -9,7 +9,7 @@ use Psr\Http\Message\ResponseInterface as Response;
  * Date: 10/12/2020
  * Time: 17:40
  */
-require_once("../core/Query.php");
+//require_once("../core/Query.php");
 
 class ControllerApiBase {
 

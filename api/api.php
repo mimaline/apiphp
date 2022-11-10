@@ -10,7 +10,7 @@ use \Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
 require_once "lib/slim/autoload.php";
-require_once "./vendor/autoload.php";
+// require_once "./vendor/autoload.php";
 require_once("core/Utils.php");
 
 require_once("controllers/ControllerApiBase.php");
