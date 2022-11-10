@@ -10,17 +10,12 @@ use \Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
 require_once "lib/slim/autoload.php";
-// require_once "./vendor/autoload.php";
 require_once("core/Utils.php");
 
 require_once("controllers/ControllerApiBase.php");
 require_once("controllers/ControllerApiUsuario.php");
 require_once("controllers/ControllerApiAuxilioEmergencial.php");
-require_once("controllers/ControllerApiUpdateDatabase.php");
-require_once("controllers/ControllerApiAtividade.php");
-require_once("controllers/ControllerApiFeedbacks.php");
 require_once("controllers/ControllerApiImobiliaria.php");
-require_once("controllers/ControllerApiFolhaPagamento.php");
 require_once("controllers/ControllerApiEmail.php");
 
 // update branch
