@@ -36,9 +36,7 @@ class ControllerApiAuxilioEmergencial extends ControllerApiBase
                    limit 10 ";
 
         $aDados = $this->getQuery()->selectAll($sSql);
-    
-        // $aDados = json_decode($aDados);
-        
+
         return $response->withJson($aDados, 200);
     }
     
