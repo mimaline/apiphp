@@ -33,7 +33,7 @@ class Query {
         }
 
         if($retornoBoolean){
-            return false;    
+            return false;
         }
         
         throw new Exception('Erro ao executar comando SQL.Erro: ' . pg_last_error($this->conexao));

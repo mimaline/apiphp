@@ -51,6 +51,7 @@ class ControllerApiBase {
 
     public function getQuery() {
         if (!isset($this->Query)) {
+            require_once ("core/Query.php");
             $this->Query = new Query();
         }
         return $this->Query;

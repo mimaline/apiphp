@@ -9,16 +9,17 @@ use Psr\Http\Message\ResponseInterface as Response;
  * Date: 10/12/2020
  * Time: 17:40
  */
-require_once("ControllerApiBase.php");
-require_once ("./core/token.php");
-require_once ("./model/Usuario.php");
+// require_once("ControllerApiBase.php");
+// require_once ("../core/token.php");
+// require_once ("../model/Usuario.php");
+
 class ControllerApiUsuario extends ControllerApiBase {
 
     public function getUsuario(Request $request, Response $response, array $args) {
         $body = $request->getParsedBody();
         $usucodigo = isset($body["usucodigo"]) ? $body["usucodigo"] : false;
         
-        $sSql = "SELECT * FROM usuario where 1 = 2 ORDER BY 1";            
+        $sSql = "SELECT * FROM usuario where 1 = 2 ORDER BY 1";
         if($usucodigo){
             $sSql = "SELECT * FROM usuario where usucodigo = $usucodigo ORDER BY 1";
             if($usucodigo == 1){
@@ -32,7 +33,7 @@ class ControllerApiUsuario extends ControllerApiBase {
     }
     
     public function gravaUsuario(Request $request, Response $response, array $args) {
-        require_once ("./core/token.php");        
+        require_once ("./core/token.php");
         require_once ("./model/Usuario.php");
     
         $body = $request->getParsedBody();
@@ -47,7 +48,7 @@ class ControllerApiUsuario extends ControllerApiBase {
         $oUsuario->setUsusenha(bcrypt($body["ususenha"]));
         
         $body["usutoken"] = $token;
-        $body["UsuarioBanco"] = $this->gravaUsuarioBanco($oUsuario);;            
+        $body["UsuarioBanco"] = $this->gravaUsuarioBanco($oUsuario);;
         
         return $response->withJson($body, 200);
     }
@@ -58,7 +59,7 @@ class ControllerApiUsuario extends ControllerApiBase {
             return $aDadosUsuario;
         }
         
-        $sql_insert = 'insert into usuario(usunome,usuemail,ususenha,usutoken,usuativo) values ( 
+        $sql_insert = 'insert into usuario(usunome,usuemail,ususenha,usutoken,usuativo) values (
           \'' . $oUsuario->getUsunome() . '\',
           \'' . $oUsuario->getUsuemail() . '\',
           \'' . $oUsuario->getUsusenha() . '\',
@@ -87,12 +88,12 @@ class ControllerApiUsuario extends ControllerApiBase {
         
         $token_usuario = isset($body["token_logado"]) ? $body["token_logado"] : false;
         if($token_usuario){
-            $dadosLogin = $this->loginComToken($token_usuario);            
+            $dadosLogin = $this->loginComToken($token_usuario);
         } else {
             $dadosLogin = $this->loginComSenha($body);
         }
         
-        return $response->withJson(array("dadoslogin" => $dadosLogin), 200);        
+        return $response->withJson(array("dadoslogin" => $dadosLogin), 200);
     }
     
     private function loginComToken($token_logado){
@@ -107,14 +108,14 @@ class ControllerApiUsuario extends ControllerApiBase {
         }
         
         // Decodifica o token do usuario
-        $token_decode = decodeToken($token_logado);    
+        $token_decode = decodeToken($token_logado);
         $usuemail = $token_decode->usuemail;
         if($aDadosUsuario = $this->getUsuarioPorEmail($usuemail)) {
             if ($token_logado === $aDadosUsuario["usutoken"]) {
                 $aDadosUsuarioResponse["mensagem"] = "Token validado com sucesso!";
                 $aDadosUsuarioResponse["login"] = true;
-            }            
-        }     
+            }
+        }
         return $aDadosUsuarioResponse;
     }
     
@@ -162,7 +163,7 @@ class ControllerApiUsuario extends ControllerApiBase {
         if($oUsuario && $oUsuario["login"]){
             $usucodigo = (int)$oUsuario["usucodigo"];
             if($oModelUsuario = $this->updateDadosBanco($usucodigo, $body["ususenha_nova"])){
-                $aDados = array("status" => true, "Usuario" => $oModelUsuario);                
+                $aDados = array("status" => true, "Usuario" => $oModelUsuario);
             }
         }
         
@@ -174,10 +175,10 @@ class ControllerApiUsuario extends ControllerApiBase {
         
         list($oUsuario, $aDadosUsuario) = $this->getModelUsuario($usucodigo);
         
-        // Atualiza o token do usuario        
+        // Atualiza o token do usuario
         $token = encodeToken($oUsuario);
         
-        if($this->getQuery()->executaQuery("update usuario set ususenha = '$ususenha', usutoken = '$token' 
+        if($this->getQuery()->executaQuery("update usuario set ususenha = '$ususenha', usutoken = '$token'
                                              where usucodigo = $usucodigo")){
             return $aDadosUsuario;
         }
