@@ -10,6 +10,7 @@ use Psr\Http\Message\ResponseInterface as Response;
  * Time: 17:40
  */
 require_once("../core/Query.php");
+
 class ControllerApiBase {
 
     public function home(Request $request, Response $response, array $args) {

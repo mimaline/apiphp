@@ -15,7 +15,8 @@ class ConexaoDB
     const DBNAME = 'postgres';
     const PORT   = '5432';
     const USER   = 'postgres';
-    const PASS   = 'mB9C@SywfzkJzmS';
+    // const PASS   = 'mB9C@SywfzkJzmS';
+    const PASS   = 'psyGy3Hl3QjJCepx';
 
     private static $conexao = null;
 
@@ -38,7 +39,7 @@ class ConexaoDB
             $PASS   = $_SERVER["APP_DATABASE_PASS"];
  
             if(Utils::isServidorProducao()){
-                // Producao conecta na supabase    
+                // Producao conecta na supabase
                 $HOST   = self::HOST;
                 $DBNAME = self::DBNAME;
                 $PORT   = self::PORT;
