@@ -16,8 +16,6 @@ require_once("controllers/ControllerApiBase.php");
 require_once("controllers/ControllerApiUsuario.php");
 require_once("controllers/ControllerApiPessoa.php");
 
-// update branch
-
 class Routes
 {
 
@@ -39,6 +37,7 @@ class Routes
             $response = $next($req, $res);
             return $response
                 // ->withHeader('Access-Control-Allow-Origin', 'https://atividades-senac-gelvazio.vercel.app')
+                // Aceita todas as origens
                 ->withHeader('Access-Control-Allow-Origin', '*')
                 // Aceita somente os atributos headers desta lista abaixo
                 ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization, apikey')
