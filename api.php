@@ -132,7 +132,7 @@ class Routes
                     // Verifica se esse token de sistema e valido
                     if (!Routes::isValidTokenApiSistema($token_sistema)) {
                     
-                        $data = array("message" => "Token Sistema inválido", "token informado:" => $token_sistema);
+                        $data = array("message" => "Token Sistema inválido", "token sistema informado:" => $token_sistema);
                     
                         return $response->withJson($data, 401);
                     }
