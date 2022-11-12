@@ -1,0 +1,57 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 
+Cabeçalho
+*/
+
+.id {
+    background-color: white;
+    border: 1px solid gray;
+}
+
+.argumento {
+    font-family: 'Times New Roman', Times, serif;
+    padding: 200px;
+    font-size: 14px;
+}
+
+/* 
+Botões
+*/
+
+.div-botoes {
+    padding: 10px 0 0 25px;
+}
+
+.icones {
+    display: flex;
+    padding: 20px;
+}
+
+.botoes {
+    font-size: 18px;
+}
+
+#cadastro {
+    color: rgb(71, 200, 255);
+}
+
+#reinicio {
+    color: rgb(55, 193, 110);
+}
+
+#editar {
+    color: black;
+}
+
+#excluir {
+    color: tomato;
+}
+
+#retornar {
+    color: rgb(71, 154, 255);
+}

@@ -1,0 +1,35 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.cabecalho {
+    display: flex;
+    flex-direction: column;
+}
+
+@font-face {
+    font-family: Harlow;
+    src: url(../font/HARLOWSI.TTF);
+}
+
+.titulo {
+    padding-left: 250px;
+}
+
+.descricao {
+    font-family: Harlow;
+    color: blue;
+    font-size: 24px;
+}
+
+.logo-01 {
+    height: 96px;
+    width: 156;
+}
+
+.logo-02 {
+    height: 96px;
+    width: 582px;
+}
