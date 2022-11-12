@@ -19,11 +19,11 @@ class ControllerApiUsuario extends ControllerApiBase {
         $body = $request->getParsedBody();
         $usucodigo = isset($body["usucodigo"]) ? $body["usucodigo"] : false;
         
-        $sSql = "SELECT * FROM usuario where 1 = 2 ORDER BY 1";
+        $sSql = "SELECT * FROM tbusuario ORDER BY 1";
         if($usucodigo){
-            $sSql = "SELECT * FROM usuario where usucodigo = $usucodigo ORDER BY 1";
+            $sSql = "SELECT * FROM tbusuario where usucodigo = $usucodigo ORDER BY 1";
             if($usucodigo == 1){
-                $sSql = "SELECT * FROM usuario ORDER BY 1";
+                $sSql = "SELECT * FROM tbusuario ORDER BY 1";
             }
         }
         
@@ -59,7 +59,7 @@ class ControllerApiUsuario extends ControllerApiBase {
             return $aDadosUsuario;
         }
         
-        $sql_insert = 'insert into usuario(usunome,usuemail,ususenha,usutoken,usuativo) values (
+        $sql_insert = 'insert into tbusuario(usunome,usuemail,ususenha,usutoken,usuativo) values (
           \'' . $oUsuario->getUsunome() . '\',
           \'' . $oUsuario->getUsuemail() . '\',
           \'' . $oUsuario->getUsusenha() . '\',
@@ -75,7 +75,7 @@ class ControllerApiUsuario extends ControllerApiBase {
     }
     
     private function getUsuarioPorEmail($email){
-        $sql_usuario = "select * from usuario where usuemail = '" . $email . "' limit 1";
+        $sql_usuario = "select * from tbusuario where usuemail = '" . $email . "' limit 1";
     
         if($aDados = $this->getQuery()->selectAll($sql_usuario)){
             return $aDados[0];
@@ -178,7 +178,7 @@ class ControllerApiUsuario extends ControllerApiBase {
         // Atualiza o token do usuario
         $token = encodeToken($oUsuario);
         
-        if($this->getQuery()->executaQuery("update usuario set ususenha = '$ususenha', usutoken = '$token'
+        if($this->getQuery()->executaQuery("update tbusuario set ususenha = '$ususenha', usutoken = '$token'
                                              where usucodigo = $usucodigo")){
             return $aDadosUsuario;
         }
@@ -186,8 +186,26 @@ class ControllerApiUsuario extends ControllerApiBase {
         return false;
     }
     
+    private function deleteUsuario(Request $request, Response $response, array $args){
+        $body = $request->getParsedBody();
+        
+        $usucodigo = isset($body["usucodigo"]) ? $body["usucodigo"] : false;
+        
+        if($usucodigo && intval($usucodigo) > 1){
+            $executaQuery = $this->getQuery()->executaQuery("delete from tbusuario where usucodigo = $usucodigo");
+            
+            if($executaQuery){
+                return $response->withJson(array("status" => true, "mensagem" => "Registro excluido com sucesso!"), 200);
+            }
+            
+            return $response->withJson(array("status" => false, "mensagem" => "Erro ao excluir registro do usuario de codigo = $usucodigo"), 200);
+        }
+        
+        return $response->withJson(array("status" => false, "mensagem" => "Não foi informado o código do usuario parametro [usucodigo]"), 200);
+    }
+    
     private function getModelUsuario($usucodigo){
-        $sql_usuario = "select * from usuario where usucodigo = $usucodigo";
+        $sql_usuario = "select * from tbusuario where usucodigo = $usucodigo";
     
         if($aDados = $this->getQuery()->selectAll($sql_usuario)){
             $aDadosUsuario = $aDados[0];

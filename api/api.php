@@ -14,9 +14,7 @@ require_once("core/Utils.php");
 
 require_once("controllers/ControllerApiBase.php");
 require_once("controllers/ControllerApiUsuario.php");
-require_once("controllers/ControllerApiAuxilioEmergencial.php");
-require_once("controllers/ControllerApiImobiliaria.php");
-require_once("controllers/ControllerApiEmail.php");
+require_once("controllers/ControllerApiPessoa.php");
 
 // update branch
 
@@ -40,66 +38,45 @@ class Routes
         $app->add(function ($req, $res, $next) {
             $response = $next($req, $res);
             return $response
-                ->withHeader('Access-Control-Allow-Origin', 'https://atividades-senac-gelvazio.vercel.app')
-                ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
-                ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+                // ->withHeader('Access-Control-Allow-Origin', 'https://atividades-senac-gelvazio.vercel.app')
+                ->withHeader('Access-Control-Allow-Origin', '*')
+                // Aceita somente os atributos headers desta lista abaixo
+                ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization, apikey')
+                // Aceita apenas os metodos abaixo
+                ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
         });
         
         // Agrupando rotas para adicionar o middleware em todas as rotas de uma só vez
         $app->group('', function () use ($app) {
-
             // Pagina inicial da api
             $app->get('/', ControllerApiBase::class . ':home');
 
             // Ping
             $app->get('/ping', ControllerApiBase::class . ':callPing');
             
-            // update banco local
-            //$app->put('/updatedatabase', ControllerApiUpdateDatabase::class . ':updateDatabase');
-            
+            // Rotas de testes
             $app->get('/test', ControllerApiBase::class . ':test');
             $app->put('/test', ControllerApiBase::class . ':test');
             $app->post('/test', ControllerApiBase::class . ':test');
             $app->delete('/test', ControllerApiBase::class . ':test');
 
-            // Cadastros
+            // Cadastros - Usuarios
             $app->get('/users', ControllerApiUsuario::class . ':getUsuario');
             $app->post('/users', ControllerApiUsuario::class . ':gravaUsuario');
+            $app->delete('/users', ControllerApiUsuario::class . ':deleteUsuario');
             $app->post('/login', ControllerApiUsuario::class . ':loginUsuario');
             $app->put('/updatepassword', ControllerApiUsuario::class . ':updatePassword');
             
             //$app->get('/logintest', ControllerApiUsuario::class . ':loginUsuario');
 
-            // Auxilios
-            $app->get('/auxilios', ControllerApiAuxilioEmergencial::class . ':getAuxilios');
+            // Pessoas
+            $app->get('/pessoa', ControllerApiPessoa::class . ':getPessoa');
+            $app->post('/pessoa', ControllerApiPessoa::class . ':savePessoa');
+            $app->delete('/pessoa', ControllerApiPessoa::class . ':deletePessoa');
             
-            // $app->get('/auxiliosapi', ControllerApiAuxilioEmergencial::class . ':getAuxiliosApi');
-            
-            // AuxiliosTest
-            // $app->get('/auxiliostest', ControllerApiAuxilioEmergencial::class . ':getAuxiliosTest');
-
-            // Cadastrar lista de auxilios
-            $app->post('/cadastrarauxilios', ControllerApiAuxilioEmergencial::class . ':cadastrarAuxilios');
-            
-            // Atividades
-            $app->get('/atividades', ControllerApiAtividade::class . ':getAtividades');
-            $app->post('/atividades', ControllerApiAtividade::class . ':gravaAtividades');
-            $app->delete('/atividades', ControllerApiAtividade::class . ':excluiAtividade');
-            
-            // Feedbacks
-            $app->get('/feedbacks', ControllerApiFeedbacks::class . ':index');
-            $app->post('/feedbackslist', ControllerApiFeedbacks::class . ':index');
-            $app->post('/feedbacks', ControllerApiFeedbacks::class . ':store');
-            $app->put('/feedbacks', ControllerApiFeedbacks::class . ':update');
-    
-            // Localizacoes Imobiliaria
-            $app->get('/imobiliaria', ControllerApiImobiliaria::class . ':index');
-    
-            // Folha Pagamento
-            $app->get('/folha', ControllerApiFolhaPagamento::class . ':index');
-            
-            // Envio de e-mails
-            $app->post('/testemail', ControllerApiEmail::class . ':testemail');
+            // Fornecedor
+            // $app->post('/fornecedor', ControllerApiPessoa::class . ':getFornecedor');
+            $app->post('/fornecedor', ControllerApiPessoa::class . ':savePessoa');
             
         })->add($this->getMiddlewares());
 
