@@ -183,19 +183,7 @@ class Routes
             return false;
         }
         
-        $token_api = Routes::getTokenApi();
-        
-        $token_sistema = $aDados["token"];
-        
-        if ($token_api === $token_sistema) {
-            return true;
-        }
-        
-        return false;
-    }
-    
-    private static function getTokenApi() {
-        return 'BE406D16ABFB8AB03A6AC07C25EBFA9E0D05DB778E0E679F214A13180530D46E1E62D206D4DF7FF8397B18DEFBE3847334809E314AAD2607E15DE7F9597CC990';
+        return true;
     }
 }
 
