@@ -39,7 +39,7 @@ class Routes {
                 // Aceita todas as origens
                 ->withHeader('Access-Control-Allow-Origin', '*')
                 // Aceita somente os atributos headers desta lista abaixo
-                ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization, apikey')
+                ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization, apikey, x-api-key-system')
                 // Aceita apenas os metodos abaixo
                 ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
         });
