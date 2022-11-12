@@ -16,6 +16,17 @@ CREATE TABLE public.tbpessoa (
 	CONSTRAINT pk_tbpessoa PRIMARY KEY (pescodigo)
 );
 
+CREATE TABLE public.tbsistema (
+	siscodigo serial NOT NULL,
+	sisnome varchar(50) NOT NULL,
+	sistokenapi varchar(200) not NULL,
+	sisativo int2 NOT NULL DEFAULT 1,
+	CONSTRAINT tbsistema_pkey PRIMARY KEY (siscodigo)
+);
+
+insert into public.tbsistema (sisnome,sistokenapi)
+values('Unifique Clone', 'BE406D16ABFB8AB03A6AC07C25EBFA9E0D05DB778E0E679F214A13180530D46E1E62D206D4DF7FF8397B18DEFBE3847334809E314AAD2607E15DE7F9597CC990');
+
 INSERT INTO public.tbpessoa
 (pescodigo, pesnome, pesendereco, pescpf)
 VALUES(1, 'joao da silva', 'Estrada Sao Jose', '237.511.490-66');

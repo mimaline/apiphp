@@ -93,40 +93,12 @@ class Routes
         $configuration = [
             'settings' => [
                 'displayErrorDetails' => true,
+                'determineRouteBeforeAppMiddleware' => true,
             ],
         ];
         $configurationContainer = new \Slim\Container($configuration);
 
         return $configurationContainer;
-    }
-
-    /**
-     * Valida se o token é valido
-     *
-     * @param $token
-     * @return bool
-     */
-    public static function isValidToken($token)
-    {
-        require_once("core/Query.php");
-        $oQuery = new Query();
-
-        $aDados = $oQuery->select("select usutoken as token
-                                    from usuario
-                                   where usuario.usutoken = '$token'
-                                     and coalesce(usuario.usuativo, 0) = 1");
-
-        if (!$aDados) {
-            return false;
-        }
-
-        $token_api = Routes::getTokenApi();
-        $token_usuario = $aDados["token"];
-        if ($token_api === $token_usuario) {
-            return true;
-        }
-
-        return false;
     }
 
     /**
@@ -138,34 +110,41 @@ class Routes
     {
         // Middlewares
         $Middlware = function (Request $request, Response $response, $next) {
-            //
-            // // Valida as requisições
-            // if (!Utils::checkRateLimit("API", Utils::getRemoteIP())) {
-            //     $data = array("message" => "Excesso de chamadas");
-            //     return $response->withJson($data, 429);
-            // }
-            //
-            // $headers = $request->getHeaders();
-            //
-            // $data = array("headers" => json_encode($headers));
-            //
-            // $token = "TOKEN_VAZIO";
-            // if(isset($headers["HTTP_X_API_KEY"]) && is_array($headers["HTTP_X_API_KEY"])){
-            //     $token = $headers["HTTP_X_API_KEY"][0];
-            //     if (trim($token) == "") {
-            //         $data = array("message" => "Acesso inválido - TOKEN - Envio:" . $token);
-            //         return $response->withJson($data, 401);
-            //     }
-            //
-            //     // Verifica se esse token é valido
-            //     if (!Routes::isValidToken($token)) {
-            //         $data = array("message" => "Token inválido");
-            //         return $response->withJson($data, 401);
-            //     }
-            // } else {
-            //     $data = array("message" => "Token inválido!");
-            //     return $response->withJson($data, 401);
-            // }
+            
+            $headers = $request->getHeaders();
+            
+            if(isset($headers["HTTP_APIKEY"]) && is_array($headers["HTTP_APIKEY"])){
+                $token = $headers["HTTP_APIKEY"][0];
+                if (trim($token) == "") {
+                    $data = array("message" => "Acesso inválido - TOKEN - Envio:" . $token);
+                    return $response->withJson($data, 401);
+                }
+            
+                // Verifica se esse token de usuario existe
+                if (!Routes::isValidTokenUsuario($token)) {
+                    $data = array("message" => "Token inválido", "token informado:" => $token);
+                    return $response->withJson($data, 401);
+                }
+    
+                if(isset($headers["HTTP_X_API_KEY_SYSTEM"]) && is_array($headers["HTTP_X_API_KEY_SYSTEM"])) {
+                    $token_sistema = $headers["HTTP_X_API_KEY_SYSTEM"][0];
+    
+                    // Verifica se esse token de sistema e valido
+                    if (!Routes::isValidTokenApiSistema($token_sistema)) {
+                    
+                        $data = array("message" => "Token Sistema inválido", "token informado:" => $token_sistema);
+                    
+                        return $response->withJson($data, 401);
+                    }
+                } else {
+                    $data = array("message" => "Token Sistema não informado!");
+                    
+                    return $response->withJson($data, 401);
+                }
+            } else {
+                $data = array("message" => "Token inválido!");
+                return $response->withJson($data, 401);
+            }
 
             $response = $next($request, $response);
 
@@ -174,9 +153,48 @@ class Routes
 
         return $Middlware;
     }
-
-    private static function getTokenApi()
-    {
+  
+    public static function isValidTokenUsuario($token) {
+        require_once("core/Query.php");
+        $oQuery = new Query();
+        
+        $aDados = $oQuery->select("select usutoken as token
+                                     from tbusuario
+                                    where tbusuario.usutoken = '$token'
+                                      and coalesce(tbusuario.usuativo, 0) = 1");
+        
+        if (!$aDados) {
+            return false;
+        }
+        
+        return true;
+    }
+    
+    public static function isValidTokenApiSistema($token) {
+        require_once("core/Query.php");
+        $oQuery = new Query();
+        
+        $aDados = $oQuery->select("select sistokenapi as token
+                                     from tbsistema
+                                    where tbsistema.sistokenapi = '$token'
+                                      and coalesce(tbsistema.sisativo, 0) = 1");
+        
+        if (!$aDados) {
+            return false;
+        }
+        
+        $token_api = Routes::getTokenApi();
+        
+        $token_sistema = $aDados["token"];
+        
+        if ($token_api === $token_sistema) {
+            return true;
+        }
+        
+        return false;
+    }
+    
+    private static function getTokenApi() {
         return 'BE406D16ABFB8AB03A6AC07C25EBFA9E0D05DB778E0E679F214A13180530D46E1E62D206D4DF7FF8397B18DEFBE3847334809E314AAD2607E15DE7F9597CC990';
     }
 }
